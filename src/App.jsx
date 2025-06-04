@@ -3,7 +3,8 @@ import Chat from "./components/Chat/Chat.jsx";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls.jsx";
 import { GeminiAssistant } from "./assistants/gemini.js";
-const geminiChat = new GeminiAssistant();
+import { OpenAIAssistant } from "./assistants/openai.js";
+const geminiChat = new OpenAIAssistant();
 
 function App() {
   const [messages, setMessages] = useState([]);

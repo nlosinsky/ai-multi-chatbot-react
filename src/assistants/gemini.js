@@ -5,9 +5,9 @@ const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY }
 export class GeminiAssistant {
   #chat;
 
-  constructor() {
+  constructor(model = "gemini-1.5-flash") {
     this.#chat = ai.chats.create({
-      model: "gemini-1.5-flash",
+      model,
       history: []
     });
   }
