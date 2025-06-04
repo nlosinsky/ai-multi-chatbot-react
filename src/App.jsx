@@ -4,7 +4,14 @@ import { useState } from "react";
 import Controls from "./components/Controls/Controls.jsx";
 
 function App() {
-  const [messages, setMessages] = useState(DEFAULT_MESSAGES);
+  const [messages, setMessages] = useState([]);
+
+  const onSend = (content) => {
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { role: 'user', content }
+    ]);
+  }
 
   return (
     <main className={styles.App}>
@@ -15,28 +22,9 @@ function App() {
       <section className={styles.ChatContainer}>
         <Chat messages={messages}/>
       </section>
-      <Controls/>
+      <Controls onSend={onSend}/>
     </main>
   )
 }
-
-const DEFAULT_MESSAGES = [
-  {
-    role: 'user',
-    content: 'Hello, how are you?'
-  },
-  {
-    role: 'assistant',
-    content: 'I am fine, thank you! How can I help you today?'
-  },
-  {
-    role: 'user',
-    content: 'What is the weather like today?'
-  },
-  {
-    role: 'assistant',
-    content: 'The weather is sunny with a high of 25°C.'
-  }
-];
 
 export default App

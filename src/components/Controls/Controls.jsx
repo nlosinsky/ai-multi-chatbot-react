@@ -1,12 +1,44 @@
 import styles from './Controls.module.css';
+import { useState } from "react";
 
-function Controls() {
+function Controls({onSend}) {
+  const [content, setContent] = useState('');
+
+  const handleChange = (event) => {
+    setContent(event.target.value);
+  }
+
+  const handleSubmit = () => {
+    if (content.trim() === '') {
+      return;
+    }
+
+    onSend(content);
+    setContent('');
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+
+      handleSubmit();
+    }
+  }
+
   return (
     <div className={styles.Controls}>
       <div className={styles.TextAreaContainer}>
-        <textarea className={styles.TextArea} placeholder="Write a message here..."></textarea>
+        <textarea className={styles.TextArea}
+                  placeholder="Write a message here..."
+                  value={content}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
+        ></textarea>
       </div>
-      <button type="button" className={styles.Button}>
+      <button type="button"
+              className={styles.Button}
+              onClick={handleSubmit}
+      >
         <SendIcon />
       </button>
     </div>
