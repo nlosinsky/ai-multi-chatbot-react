@@ -2,15 +2,26 @@ import styles from './App.module.css';
 import Chat from "./components/Chat/Chat.jsx";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls.jsx";
+import { GeminiAssistant } from "./assistants/gemini.js";
+const geminiChat = new GeminiAssistant();
 
 function App() {
   const [messages, setMessages] = useState([]);
 
-  const onSend = (content) => {
-    setMessages(prevMessages => [
-      ...prevMessages,
-      { role: 'user', content }
-    ]);
+  const addMessage = (message) => {
+    setMessages(prevMessages => [...prevMessages, message]);
+  }
+
+  const onSend = async (content) => {
+    addMessage({ role: 'user', content });
+
+    try {
+      const result = await geminiChat.sendMessage(content);
+      addMessage({ role: 'assistant', content: result });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      addMessage({ role: 'assistant', content: 'An error occurred while processing your request.' });
+    }
   }
 
   return (
