@@ -1,8 +1,17 @@
-import styles from './Controls.module.css';
-import { useState } from "react";
+import TextAreaAutoResize from 'react-textarea-autosize';
 
-function Controls({onSend}) {
+import styles from './Controls.module.css';
+import { useEffect, useRef, useState } from "react";
+
+function Controls({ onSend, isDisabled }) {
   const [content, setContent] = useState('');
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (!isDisabled && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [isDisabled]);
 
   const handleChange = (event) => {
     setContent(event.target.value);
@@ -28,18 +37,23 @@ function Controls({onSend}) {
   return (
     <div className={styles.Controls}>
       <div className={styles.TextAreaContainer}>
-        <textarea className={styles.TextArea}
-                  placeholder="Write a message here..."
-                  value={content}
-                  onChange={handleChange}
-                  onKeyDown={handleKeyDown}
-        ></textarea>
+        <TextAreaAutoResize className={styles.TextArea}
+                            placeholder="Write a message here..."
+                            value={content}
+                            minRows={1}
+                            maxRows={5}
+                            ref={textareaRef}
+                            disabled={isDisabled}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+        ></TextAreaAutoResize>
       </div>
       <button type="button"
               className={styles.Button}
               onClick={handleSubmit}
+              disabled={isDisabled || content.trim() === ''}
       >
-        <SendIcon />
+        <SendIcon/>
       </button>
     </div>
   );
