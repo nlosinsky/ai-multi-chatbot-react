@@ -5,7 +5,7 @@ const client = new OpenAI({
   dangerouslyAllowBrowser: true
 });
 
-export class OpenAIAssistant {
+export class Assistant {
   #model;
 
   constructor(model = "gpt-4o-mini") {

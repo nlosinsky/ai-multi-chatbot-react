@@ -6,7 +6,7 @@ const client = new OpenAI({
   dangerouslyAllowBrowser: true
 });
 
-export class DeepSeekAssistant {
+export class Assistant {
   #model;
 
   constructor(model = "deepseek-chat") {

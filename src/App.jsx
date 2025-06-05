@@ -3,9 +3,9 @@ import Chat from "./components/Chat/Chat.jsx";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls.jsx";
 import Loader from "./components/Loader/Loader.jsx";
-import { AnthropicAssistant } from "./assistants/anthropic.js";
+import AssistantControl from "./components/AssistantControl/AssistantControl.jsx";
 
-const chat = new AnthropicAssistant();
+let assistant = null;
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -33,7 +33,7 @@ function App() {
 
     try {
       // todo pass previous messages history
-      const stream = await chat.sendMessageStream(content);
+      const stream = await assistant.sendMessageStream(content);
       let isFirstChunk = false;
       for await (const chunk of stream) {
         if (!isFirstChunk) {
@@ -53,6 +53,10 @@ function App() {
     }
   }
 
+  function handleAssistantChange(newAssistant) {
+    assistant = newAssistant;
+  }
+
   return (
     <main className={styles.App}>
       {isLoading && <Loader/>}
@@ -64,6 +68,7 @@ function App() {
         <Chat messages={messages}/>
       </section>
       <Controls onSend={onSend} isDisabled={isLoading || isStreaming}/>
+      <AssistantControl onAssistantChange={handleAssistantChange} />
     </main>
   )
 }
