@@ -23,11 +23,15 @@ function Chat({ messages }) {
   const messagesWithWelcome = messages.length === 0 ? [WELCOME_MESSAGE_GROUP] : messagesGroups;
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'nearest'
-    });
+    const lastMessage = messages[messages.length - 1];
+
+    if (lastMessage?.role === 'user') {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest'
+      });
+    }
   }, [messages])
 
   return (

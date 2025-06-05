@@ -17,4 +17,11 @@ export class GeminiAssistant {
     return result.text;
   }
 
+  async* sendMessageStream(message) {
+    const stream = await this.#chat.sendMessageStream({ message });
+
+    for await (const chunk of stream) {
+      yield chunk.text
+    }
+  }
 }
