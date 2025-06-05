@@ -32,7 +32,5 @@ export class DeepSeekAssistant {
     for await (const chunk of stream) {
       yield chunk.choices[0].delta.content;
     }
-
-    return null;
   }
 }

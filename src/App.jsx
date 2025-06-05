@@ -3,9 +3,9 @@ import Chat from "./components/Chat/Chat.jsx";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls.jsx";
 import Loader from "./components/Loader/Loader.jsx";
-import { DeepSeekAssistant } from "./assistants/deepseek.js";
+import { AnthropicAssistant } from "./assistants/anthropic.js";
 
-const chat = new DeepSeekAssistant();
+const chat = new AnthropicAssistant();
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -32,6 +32,7 @@ function App() {
     addMessage({ role: 'user', content });
 
     try {
+      // todo pass previous messages history
       const stream = await chat.sendMessageStream(content);
       let isFirstChunk = false;
       for await (const chunk of stream) {
