@@ -12,6 +12,7 @@ export class OpenAIAssistant {
     this.#model = model;
   }
 
+  // todo remove
   async sendMessage(content) {
     const response = await client.responses.create({
       model: this.#model,

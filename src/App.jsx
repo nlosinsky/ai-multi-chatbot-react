@@ -3,9 +3,9 @@ import Chat from "./components/Chat/Chat.jsx";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls.jsx";
 import Loader from "./components/Loader/Loader.jsx";
-import { OpenAIAssistant } from "./assistants/openai.js";
+import { DeepSeekAssistant } from "./assistants/deepseek.js";
 
-const chat = new OpenAIAssistant();
+const chat = new DeepSeekAssistant();
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -46,7 +46,7 @@ function App() {
       setIsStreaming(false);
     } catch (error) {
       console.error('Error sending message:', error);
-      addMessage({ role: 'assistant', content: 'An error occurred while processing your request.' });
+      addMessage({ role: 'system', content: 'An error occurred while processing your request.' });
       setIsLoading(false);
       setIsStreaming(false);
     }

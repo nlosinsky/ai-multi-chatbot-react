@@ -12,6 +12,7 @@ export class GeminiAssistant {
     });
   }
 
+  // todo remove
   async sendMessage(message) {
     const result = await this.#chat.sendMessage({ message });
     return result.text;
