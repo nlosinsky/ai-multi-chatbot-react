@@ -1,4 +1,4 @@
-import styles from './AssistantControl.module.css';
+import styles from './AssistantSelector.module.css';
 import { useEffect, useState } from "react";
 
 import { Assistant as GoogleAIAssistant } from "../../assistants/googleai";
@@ -15,7 +15,7 @@ const assistantMap = {
   xai: XAIAssistant,
 };
 
-function AssistantControl({ onAssistantChange }) {
+function AssistantSelector({ onAssistantChange }) {
   const [value, setValue] = useState("googleai:gemini-2.0-flash");
 
   const handleValueChange = (event) => {
@@ -68,4 +68,4 @@ function AssistantControl({ onAssistantChange }) {
   );
 }
 
-export default AssistantControl;
+export default AssistantSelector;

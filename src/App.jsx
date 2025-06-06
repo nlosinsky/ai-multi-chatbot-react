@@ -3,7 +3,8 @@ import Chat from "./components/Chat/Chat.jsx";
 import { useState } from "react";
 import Controls from "./components/Controls/Controls.jsx";
 import Loader from "./components/Loader/Loader.jsx";
-import AssistantControl from "./components/AssistantControl/AssistantControl.jsx";
+import AssistantSelector from "./components/AssistantSelector/AssistantSelector.jsx";
+import ThemeSelector from "./components/ThemeSelector/ThemeSelector.jsx";
 
 let assistant = null;
 
@@ -68,7 +69,11 @@ function App() {
         <Chat messages={messages}/>
       </section>
       <Controls onSend={onSend} isDisabled={isLoading || isStreaming}/>
-      <AssistantControl onAssistantChange={handleAssistantChange} />
+
+      <div className={styles.Configuration}>
+        <AssistantSelector onAssistantChange={handleAssistantChange} />
+        <ThemeSelector />
+      </div>
     </main>
   )
 }
