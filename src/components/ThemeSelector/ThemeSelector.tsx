@@ -1,5 +1,5 @@
-import styles from './ThemeSelector.module.css';
 import { useState } from "react";
+import styles from './ThemeSelector.module.css';
 
 function ThemeSelector() {
   const [theme, setTheme] = useState('light dark');
@@ -8,7 +8,7 @@ function ThemeSelector() {
     document.documentElement.style.colorScheme = theme;
   }
 
-  const handleValueChange = (event) => {
+  const handleValueChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     document.documentElement.style.colorScheme = event.target.value;
     setTheme(event.target.value);
   }

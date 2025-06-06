@@ -1,45 +1,49 @@
-import styles from './App.module.css';
-import Chat from "./components/Chat/Chat.jsx";
 import { useState } from "react";
-import Controls from "./components/Controls/Controls.jsx";
-import Loader from "./components/Loader/Loader.jsx";
-import AssistantSelector from "./components/AssistantSelector/AssistantSelector.jsx";
-import ThemeSelector from "./components/ThemeSelector/ThemeSelector.jsx";
+import styles from './App.module.css';
+import AssistantSelector from "./components/AssistantSelector/AssistantSelector.tsx";
+import Chat from './components/Chat/Chat.tsx';
+import Controls from "./components/Controls/Controls.tsx";
+import Loader from "./components/Loader/Loader.tsx";
+import ThemeSelector from "./components/ThemeSelector/ThemeSelector.tsx";
+import { type Assistant, type Message } from './types';
 
-let assistant = null;
+let assistant: null | Assistant = null;
 
 function App() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
 
-  const addMessage = (message) => {
+  const addMessage = (message: Message) => {
     setMessages(prevMessages => [...prevMessages, message]);
   }
 
-  const updateLastMessage = (content) => {
+  const updateLastMessage = (content: string) => {
     setMessages(prevMessages => {
       return prevMessages.map((message, index) => {
         if (index === prevMessages.length - 1 && message.role === 'assistant') {
-          return { ...message, content: `${message.content}${content}` };
+          return {...message, content: `${message.content}${content}`};
         }
         return message;
       })
     });
   }
 
-  const onSend = async (content) => {
+  const onSend = async (content: string) => {
     setIsLoading(true);
-    addMessage({ role: 'user', content });
+    addMessage({role: 'user', content});
 
     try {
+      if (!assistant) {
+        throw new Error('No assistant selected');
+      }
       // todo pass previous messages history
       const stream = await assistant.sendMessageStream(content);
       let isFirstChunk = false;
       for await (const chunk of stream) {
         if (!isFirstChunk) {
           isFirstChunk = true;
-          addMessage({ role: 'assistant', content: '' });
+          addMessage({role: 'assistant', content: ''});
           setIsStreaming(true);
           setIsLoading(false);
         }
@@ -48,13 +52,13 @@ function App() {
       setIsStreaming(false);
     } catch (error) {
       console.error('Error sending message:', error);
-      addMessage({ role: 'system', content: 'An error occurred while processing your request.' });
+      addMessage({role: 'system', content: 'An error occurred while processing your request.'});
       setIsLoading(false);
       setIsStreaming(false);
     }
   }
 
-  function handleAssistantChange(newAssistant) {
+  function handleAssistantChange(newAssistant: Assistant) {
     assistant = newAssistant;
   }
 
@@ -71,8 +75,8 @@ function App() {
       <Controls onSend={onSend} isDisabled={isLoading || isStreaming}/>
 
       <div className={styles.Configuration}>
-        <AssistantSelector onAssistantChange={handleAssistantChange} />
-        <ThemeSelector />
+        <AssistantSelector onAssistantChange={handleAssistantChange}/>
+        <ThemeSelector/>
       </div>
     </main>
   )

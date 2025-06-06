@@ -1,11 +1,12 @@
 import OpenAI from "openai";
+import type { Assistant } from '../types';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
-export class OpenAIAssistant {
+export class OpenAIAssistant implements Assistant {
   #client;
   #model;
 
@@ -14,7 +15,7 @@ export class OpenAIAssistant {
     this.#model = model;
   }
 
-  async* sendMessageStream(content) {
+  async* sendMessageStream(content: string) {
     const stream = await this.#client.chat.completions.create({
       messages: [{ content, role: 'user' }],
       model: this.#model,

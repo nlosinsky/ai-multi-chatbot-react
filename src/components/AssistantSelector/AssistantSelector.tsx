@@ -1,12 +1,22 @@
-import styles from './AssistantSelector.module.css';
 import { useEffect, useState } from "react";
-import { GoogleAIAssistant } from "../../assistants/googleai.js";
-import { OpenAIAssistant } from "../../assistants/openai.js";
-import { XAIAssistant } from "../../assistants/xai.js";
-import { AnthropicAIAssistant } from "../../assistants/anthropicai.js";
-import { DeepseekAIAssistant } from "../../assistants/deepseekai.js";
+import {
+  AnthropicAIAssistant,
+  DeepseekAIAssistant,
+  GoogleAIAssistant,
+  OpenAIAssistant,
+  XAIAssistant
+} from '../../assistants';
+import type { Assistant } from '../../types';
+import styles from './AssistantSelector.module.css';
 
-const assistantMap = {
+type AssistantType = "googleai" | "openai" | "deepseekai" | "anthropicai" | "xai";
+
+type AssistantMapType = {
+  // [key in AssistantType]: typeof Assistant;
+  [key in AssistantType]: new (model?: string) => Assistant;
+};
+
+const assistantMap: AssistantMapType = {
   googleai: GoogleAIAssistant,
   openai: OpenAIAssistant,
   deepseekai: DeepseekAIAssistant,
@@ -14,15 +24,19 @@ const assistantMap = {
   xai: XAIAssistant,
 };
 
-function AssistantSelector({ onAssistantChange }) {
+type AssistantSelectorProps = {
+  onAssistantChange: (assistant: Assistant) => void;
+}
+
+function AssistantSelector({onAssistantChange}: AssistantSelectorProps) {
   const [value, setValue] = useState("openai:gpt-4o-mini");
 
-  const handleValueChange = (event) => {
+  const handleValueChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setValue(event.target.value);
   };
 
   useEffect(() => {
-    const [assistant, model] = value.split(":");
+    const [assistant, model] = value.split(":") as [AssistantType, string];
     const AssistantClass = assistantMap[assistant];
 
     if (!AssistantClass) {
@@ -30,7 +44,7 @@ function AssistantSelector({ onAssistantChange }) {
     }
 
     onAssistantChange(new AssistantClass(model));
-  }, [value]);
+  }, [value, onAssistantChange]);
 
 
   return (

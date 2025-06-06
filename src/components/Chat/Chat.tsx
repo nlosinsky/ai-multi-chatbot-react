@@ -1,25 +1,30 @@
+import { useEffect, useMemo, useRef } from "react";
 import Markdown from 'react-markdown';
+import type { Message } from '../../types';
 
 import styles from './Chat.module.css';
-import { useEffect, useMemo, useRef } from "react";
+
+type Group = [Message] | [Message, Message];
 
 const WELCOME_MESSAGE_GROUP = [{
   role: 'assistant',
   content: 'Welcome to the AI Chatbot! How can I assist you today?'
 }]
 
-function Chat({ messages }) {
-  const messagesEndRef = useRef(null);
-  const messagesGroups = useMemo(() => {
-    return messages.reduce((groups, message) => {
-      if (message.role === 'user') {
-        groups.push([]);
-      }
+function Chat({messages}: { messages: Message[] }) {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-      groups[groups.length - 1].push(message);
+  const messagesGroups = useMemo(() => {
+    return messages.reduce((groups: Group[], message) => {
+      if (message.role === 'user') {
+        groups.push([message]);
+      } else {
+        groups[groups.length - 1].push(message);
+      }
       return groups;
     }, []);
   }, [messages]);
+
   const messagesWithWelcome = messages.length === 0 ? [WELCOME_MESSAGE_GROUP] : messagesGroups;
 
   useEffect(() => {
@@ -37,12 +42,12 @@ function Chat({ messages }) {
   return (
     <div className={styles.Chat}>
       {
-        messagesWithWelcome.map((messages, groupIndex) => (
+        messagesWithWelcome.map((messages, groupIndex: number) => (
           <div key={groupIndex}
                className={styles.Group}
           >
             {
-              messages.map(({ role, content }, index) => (
+              messages.map(({role, content}, index) => (
                 <div key={index}
                      data-role={role}
                      className={styles.Message}

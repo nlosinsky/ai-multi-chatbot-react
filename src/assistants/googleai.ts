@@ -1,8 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
+import type { Assistant } from '../types';
 
 const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_AI_API_KEY });
 
-export class GoogleAIAssistant {
+export class GoogleAIAssistant implements Assistant {
   #chat;
 
   constructor(model = "gemini-1.5-flash") {
@@ -12,11 +13,13 @@ export class GoogleAIAssistant {
     });
   }
 
-  async* sendMessageStream(message) {
+  async *sendMessageStream(message: string) {
     const stream = await this.#chat.sendMessageStream({ message });
 
     for await (const chunk of stream) {
-      yield chunk.text
+      if (chunk.text) {
+        yield chunk.text
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { OpenAIAssistant } from "./openai.js";
+import { OpenAIAssistant } from "./openai";
 
 const client = new OpenAI({
   baseURL: 'https://api.deepseek.com',

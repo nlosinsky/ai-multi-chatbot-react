@@ -1,11 +1,16 @@
+import { useEffect, useRef, useState } from "react";
 import TextAreaAutoResize from 'react-textarea-autosize';
 
 import styles from './Controls.module.css';
-import { useEffect, useRef, useState } from "react";
 
-function Controls({ onSend, isDisabled }) {
+type ControlsProps = {
+  onSend: (content: string) => void;
+  isDisabled?: boolean;
+}
+
+function Controls({onSend, isDisabled}: ControlsProps) {
   const [content, setContent] = useState('');
-  const textareaRef = useRef(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!isDisabled && textareaRef.current) {
@@ -13,7 +18,7 @@ function Controls({ onSend, isDisabled }) {
     }
   }, [isDisabled]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value);
   }
 
@@ -26,7 +31,7 @@ function Controls({ onSend, isDisabled }) {
     setContent('');
   }
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
 
