@@ -6,7 +6,7 @@ const client = new Anthropic({
 });
 
 
-export class Assistant {
+export class AnthropicAIAssistant {
   #model;
 
   constructor(model = "claude-3-5-haiku-20241022") {

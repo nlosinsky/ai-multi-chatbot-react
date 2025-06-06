@@ -1,36 +1,29 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
+const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
-export class Assistant {
+export class OpenAIAssistant {
+  #client;
   #model;
 
-  constructor(model = "gpt-4o-mini") {
+  constructor(model = "gpt-4o-mini", client = openai) {
+    this.#client = client;
     this.#model = model;
   }
 
-  // todo remove
-  async sendMessage(content) {
-    const response = await client.responses.create({
-      model: this.#model,
-      input: [{ content, role: 'user' }],
-    });
-    return response.output_text;
-  }
-
   async* sendMessageStream(content) {
-    const stream = await client.responses.create({
+    const stream = await this.#client.chat.completions.create({
+      messages: [{ content, role: 'user' }],
       model: this.#model,
-      input: [{ content, role: 'user' }],
       stream: true
     });
 
     for await (const chunk of stream) {
-      if (chunk.type === 'response.output_text.delta') {
-        yield chunk.delta;
+      if (chunk.choices[0].delta.content) {
+        yield chunk.choices[0].delta.content;
       }
     }
   }

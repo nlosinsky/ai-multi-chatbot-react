@@ -1,22 +1,21 @@
 import styles from './AssistantSelector.module.css';
 import { useEffect, useState } from "react";
-
-import { Assistant as GoogleAIAssistant } from "../../assistants/googleai";
-import { Assistant as OpenAIAssistant } from "../../assistants/openai";
-import { Assistant as DeepSeekAIAssistant } from "../../assistants/deepseekai";
-import { Assistant as AnthropicAIAssistant } from "../../assistants/anthropicai";
-import { Assistant as XAIAssistant } from "../../assistants/xai";
+import { GoogleAIAssistant } from "../../assistants/googleai.js";
+import { OpenAIAssistant } from "../../assistants/openai.js";
+import { XAIAssistant } from "../../assistants/xai.js";
+import { AnthropicAIAssistant } from "../../assistants/anthropicai.js";
+import { DeepseekAIAssistant } from "../../assistants/deepseekai.js";
 
 const assistantMap = {
   googleai: GoogleAIAssistant,
   openai: OpenAIAssistant,
-  deepseekai: DeepSeekAIAssistant,
+  deepseekai: DeepseekAIAssistant,
   anthropicai: AnthropicAIAssistant,
   xai: XAIAssistant,
 };
 
 function AssistantSelector({ onAssistantChange }) {
-  const [value, setValue] = useState("googleai:gemini-2.0-flash");
+  const [value, setValue] = useState("openai:gpt-4o-mini");
 
   const handleValueChange = (event) => {
     setValue(event.target.value);

@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { OpenAIAssistant } from "./openai.js";
 
 const client = new OpenAI({
   baseURL: 'https://api.deepseek.com',
@@ -6,31 +7,8 @@ const client = new OpenAI({
   dangerouslyAllowBrowser: true
 });
 
-export class Assistant {
-  #model;
-
+export class DeepseekAIAssistant extends OpenAIAssistant {
   constructor(model = "deepseek-chat") {
-    this.#model = model;
-  }
-
-  // todo remove
-  async sendMessage(content) {
-    const completion = await client.chat.completions.create({
-      messages: [{ content, role: 'user' }],
-      model: this.#model,
-    });
-    return completion.choices[0].message.content;
-  }
-
-  async* sendMessageStream(content) {
-    const stream = await client.chat.completions.create({
-      messages: [{ content, role: 'user' }],
-      model: this.#model,
-      stream: true
-    });
-
-    for await (const chunk of stream) {
-      yield chunk.choices[0].delta.content;
-    }
+    super(model, client);
   }
 }

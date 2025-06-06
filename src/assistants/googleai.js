@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_AI_API_KEY });
 
-export class Assistant {
+export class GoogleAIAssistant {
   #chat;
 
   constructor(model = "gemini-1.5-flash") {
@@ -10,12 +10,6 @@ export class Assistant {
       model,
       history: []
     });
-  }
-
-  // todo remove
-  async sendMessage(message) {
-    const result = await this.#chat.sendMessage({ message });
-    return result.text;
   }
 
   async* sendMessageStream(message) {
