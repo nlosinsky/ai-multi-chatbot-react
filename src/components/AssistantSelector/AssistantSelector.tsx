@@ -6,14 +6,15 @@ import {
   OpenAIAssistant,
   XAIAssistant
 } from '../../assistants';
-import type { Assistant } from '../../types';
+import type { Message } from '../../types';
 import styles from './AssistantSelector.module.css';
 
 type AssistantType = "googleai" | "openai" | "deepseekai" | "anthropicai" | "xai";
 
+type AssistantCommon = GoogleAIAssistant | OpenAIAssistant | DeepseekAIAssistant | AnthropicAIAssistant | XAIAssistant;
+
 type AssistantMapType = {
-  // [key in AssistantType]: typeof Assistant;
-  [key in AssistantType]: new (model?: string) => Assistant;
+  [key in AssistantType]: new (model?: string) => AssistantCommon;
 };
 
 const assistantMap: AssistantMapType = {
@@ -25,10 +26,11 @@ const assistantMap: AssistantMapType = {
 };
 
 type AssistantSelectorProps = {
-  onAssistantChange: (assistant: Assistant) => void;
+  onAssistantChange: (assistant: AssistantCommon) => void;
+  messages: Message[]
 }
 
-function AssistantSelector({onAssistantChange}: AssistantSelectorProps) {
+function AssistantSelector({onAssistantChange, messages}: AssistantSelectorProps) {
   const [value, setValue] = useState("openai:gpt-4o-mini");
 
   const handleValueChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -43,7 +45,8 @@ function AssistantSelector({onAssistantChange}: AssistantSelectorProps) {
       throw new Error(`Unknown assistant: ${assistant} or model: ${model}`);
     }
 
-    onAssistantChange(new AssistantClass(model));
+    const assistantInstance = (assistant === 'googleai') ? new GoogleAIAssistant(model, messages) : new AssistantClass(model)
+    onAssistantChange(assistantInstance);
   }, [value, onAssistantChange]);
 
 

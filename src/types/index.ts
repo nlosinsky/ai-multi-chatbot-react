@@ -4,5 +4,5 @@ export type Message = {
 }
 
 export interface Assistant {
-  sendMessageStream(content: string): AsyncGenerator<string, void, unknown>;
+  sendMessageStream(content: string, messages?: Message[]): AsyncGenerator<string, void, unknown>;
 }

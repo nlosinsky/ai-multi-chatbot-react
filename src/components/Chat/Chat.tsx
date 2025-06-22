@@ -37,7 +37,7 @@ function Chat({messages}: { messages: Message[] }) {
         inline: 'nearest'
       });
     }
-  }, [messages])
+  }, [messages]);
 
   return (
     <div className={styles.Chat}>

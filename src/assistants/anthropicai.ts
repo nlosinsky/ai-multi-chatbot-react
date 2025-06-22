@@ -1,5 +1,6 @@
 import { Anthropic } from '@anthropic-ai/sdk';
-import type { Assistant } from '../types';
+import type { Assistant, Message } from '../types';
+import type { MessageParam } from "@anthropic-ai/sdk/resources/messages";
 
 const client = new Anthropic({
   apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
@@ -21,9 +22,9 @@ export class AnthropicAIAssistant implements Assistant {
     this.#model = model;
   }
 
-  async* sendMessageStream(content: string) {
+  async* sendMessageStream(content: string, messages: Message[] = []) {
     const stream = await client.messages.create({
-      messages: [{content, role: 'user'}],
+      messages: [...messages.filter(m => m.role !== 'system') as MessageParam[], {content, role: 'user'}],
       max_tokens: 1024,
       model: this.#model,
       stream: true

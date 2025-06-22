@@ -1,12 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
-import type { Assistant } from '../types';
+import type { Assistant, Message } from '../types';
 
 const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GOOGLE_AI_API_KEY });
 
 export class GoogleAIAssistant implements Assistant {
   #chat;
 
-  constructor(model = "gemini-1.5-flash") {
+  constructor(model = "gemini-1.5-flash", messages: Message[] = []) {
+    console.log(messages);
     this.#chat = ai.chats.create({
       model,
       history: []
