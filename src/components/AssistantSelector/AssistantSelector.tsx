@@ -74,6 +74,12 @@ function AssistantSelector({onAssistantChange, messages}: AssistantSelectorProps
           <option value="anthropicai:claude-3-5-haiku-latest">
             Claude 3.5 Haiku
           </option>
+          <option value="anthropicai:claude-3-5-sonnet-latest">
+            Claude Sonnet 3.5
+          </option>
+          <option value="anthropicai:claude-sonnet-4-0">
+            Claude Sonnet 4
+          </option>
         </optgroup>
 
         <optgroup label="X AI">
